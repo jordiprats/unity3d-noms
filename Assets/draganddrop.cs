@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class draganddrop : MonoBehaviour {
+
+    public AudioClip sound_ok;
+    public AudioClip sound_error;
 
     private bool draggingItem = false;
     private GameObject draggedObject;
@@ -138,6 +142,7 @@ public class draganddrop : MonoBehaviour {
     private void DragOrPickUp()
     {
         var inputPosition = CurrentTouchPosition;
+        AudioSource audio = GetComponent<AudioSource>();
 
         if (draggingItem)
         {
@@ -166,6 +171,9 @@ public class draganddrop : MonoBehaviour {
                         //Debug.Log("touche "+opcio.GetComponent<SpriteRenderer>().sprite.name);
                         if(opcio.GetComponent<SpriteRenderer>().sprite.name == nomsecret.GetComponent<SpriteRenderer>().sprite.name)
                         {
+                            audio.clip = sound_ok;
+
+                            audio.Play();
                             Debug.Log("got it: " + opcio.GetComponent<SpriteRenderer>().sprite.name + " vs "+ nomsecret.GetComponent<SpriteRenderer>().sprite.name);
                             //reset pos
                             opcio.transform.position = new Vector3(-7f, opcio_reset_pos[opcio.name], 0f); //null exception here
@@ -200,6 +208,9 @@ public class draganddrop : MonoBehaviour {
                         }
                         else
                         {
+                            audio.clip = sound_error;
+
+                            audio.Play();
                             //reset pos
                             opcio.transform.position= new Vector3(-7f, opcio_reset_pos[opcio.name], 0f);
                             if(draggingItem)
